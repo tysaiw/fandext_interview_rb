@@ -14,14 +14,15 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_difference('User.count') do
       post users_path, params: { user: { email: 'test@example.com', first_name: 'Aiko', last_name: 'Chen', address: '123 Road' } }
     end
+    assert_equal 'Welcome to fandnext', flash[:success]
     assert_redirected_to users_path
-    follow_redirect!
   end
 
   test "create user failed" do
     assert_no_difference('User.count') do
       post users_path, params: { user: { email: '', first_name: '', last_name: '', address: '' } }
     end
+    assert_equal 'User create failed', flash[:warning]
     assert_template :new
   end
 end
