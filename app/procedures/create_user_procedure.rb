@@ -2,6 +2,7 @@ class CreateUserProcedure < ApplicationProcedure
   class InvalidUserAttributes < StandardError; end
 
   attr_reader :user
+  after_create :send_welcome_mail
 
   def self.call(context, user:)
     procedure = new(context, user)
@@ -42,8 +43,9 @@ class CreateUserProcedure < ApplicationProcedure
     end
   end
 
+  
   def send_welcome_mail
-    # mail to user
+    UserMailer.welcome_email(self).deliver_now
   end
 
   def login_user
